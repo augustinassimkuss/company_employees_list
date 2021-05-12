@@ -18,9 +18,18 @@ Route::get('/', function () {
 });
 
 Auth::routes([
-    'register' => false
+    
 ]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::resources([
+        'companies' => CompanyController::class,
+        'employees'=> EmployeeController::class,
+    ]);
+        
+    Route::DELETE('/companies/{id}/wipe', 'CompanyController@wipe')->name('companies.wipe');
+    Route::post('/companies/{id}', 'CompanyController@image')->name('companies.image');
+});
 
